@@ -55,12 +55,11 @@ module fixed_point_tb();
         assert(a.value == 64'h3fff_ffff_ffff_fffe) else $error("Failed to decrease Q: Incorrect value.");
     endfunction
 
-    initial
-        begin
+    function void test_add();
+        FixedPoint a;
+        FixedPoint b;
+        FixedPoint c;
 
-        test_convert();
-
-        // TODO: Test same format arithemtic
         a = '{
             M : 15,
             Q : 16,
@@ -75,12 +74,15 @@ module fixed_point_tb();
 
         // Test addition with same format.
         c = add(a, b);
-        assert(c.M == 15);
-        assert(c.Q == 16);
-        assert(c.value == 64'h7fff_ffff_ffff_ffff);
+        assert(c.M == 15) else $error("Failed to add values: Incorrect M.");
+        assert(c.Q == 16) else $error("Failed to add values: Incorrect Q.");
+        assert(c.value == 64'h7fff_ffff_ffff_ffff) else $error("Failed to add values: Incorrect value.");
+    endfunction
 
-        // TODO: Test subtract with same format.
-
+    function void test_mult();
+        FixedPoint a;
+        FixedPoint b;
+        FixedPoint c;
 
         a = '{
             M : 15,
@@ -96,9 +98,24 @@ module fixed_point_tb();
 
         // Test multiply with same format.
         c = mult(a, b);
-        assert(c.M == 30);
-        assert(c.Q == 16);
-        assert(c.value == 64'h0000_000C_0000_0000);
+        assert(c.M == 30) else $error("Failed to multiply values: Incorrect M.");
+        assert(c.Q == 16) else $error("Failed to multiply values: Incorrect Q.");
+        assert(c.value == 64'h0000_000C_0000_0000) else $error("Failed to multiply values: Incorrect value.");
+    endfunction
+
+    initial
+        begin
+
+        // Test convert()
+        test_convert();
+
+        // Test add()
+        test_add();
+
+        // TODO: Test subtract with same format.
+
+        // Test mult()
+        test_mult();
 
         // TODO: Test non-same format.
 
