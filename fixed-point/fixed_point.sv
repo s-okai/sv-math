@@ -88,7 +88,29 @@ package fixed_point;
         return c;
     endfunction
 
-    // TODO: sub
+    // Returns the difference of a and b in significant figures.
+    function FixedPoint subtract(FixedPoint a, FixedPoint b);
+        FixedPoint ext_a;
+        FixedPoint ext_b;
+        FixedPoint c;
+
+        // Extend both values for subtraction.
+        ext_a = convert(a, max(a.M, b.M), max(a.Q, b.Q));
+        ext_b = convert(b, max(a.M, b.M), max(a.Q, b.Q));
+
+        // NOTE: This assumes no overflow...
+        // Get # of relevant bits for subtraction.
+        c.M = ext_a.M;
+        c.Q = ext_a.Q;
+
+        //subtract.value = ext_a.value[(MAX_FIXED_POINT_WIDTH-1):(MAX_FIXED_POINT_WIDTH-max_width)] - ext_b.value[(MAX_FIXED_POINT_WIDTH-1):(MAX_FIXED_POINT_WIDTH-max_width)];
+        c.value = ext_a.value - ext_b.value;
+
+        // Reduce based on significant figures.
+        c = convert(c, max(a.M, b.M), min(a.Q, b.Q));
+
+        return c;
+    endfunction
 
     // TODO: mult
     function FixedPoint mult(FixedPoint a, FixedPoint b);
