@@ -88,6 +88,7 @@ package fixed_point;
         return c;
     endfunction
 
+    // Returns the difference of a and b in significant figures.
     function FixedPoint subtract(FixedPoint a, FixedPoint b);
         FixedPoint ext_a;
         FixedPoint ext_b;
@@ -102,7 +103,7 @@ package fixed_point;
         c.M = ext_a.M;
         c.Q = ext_a.Q;
 
-        //add.value = ext_a.value[(MAX_FIXED_POINT_WIDTH-1):(MAX_FIXED_POINT_WIDTH-max_width)] - ext_b.value[(MAX_FIXED_POINT_WIDTH-1):(MAX_FIXED_POINT_WIDTH-max_width)];
+        //subtract.value = ext_a.value[(MAX_FIXED_POINT_WIDTH-1):(MAX_FIXED_POINT_WIDTH-max_width)] - ext_b.value[(MAX_FIXED_POINT_WIDTH-1):(MAX_FIXED_POINT_WIDTH-max_width)];
         c.value = ext_a.value - ext_b.value;
 
         // Reduce based on significant figures.

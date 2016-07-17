@@ -79,6 +79,30 @@ module fixed_point_tb();
         assert(c.value == 64'h7fff_ffff_ffff_ffff) else $error("Failed to add values: Incorrect value.");
     endfunction
 
+	function void test_subtract();
+        FixedPoint a;
+        FixedPoint b;
+        FixedPoint c;
+
+        a = '{
+            M : 15,
+            Q : 16,
+            value : 64'h4000_0000_0000_0000
+        };
+
+        b = '{
+            M : 15,
+            Q : 16,
+            value : 64'h3fff_ffff_ffff_ffff
+        };
+
+        // Test addition with same format.
+        c = subtract(a, b);
+        assert(c.M == 15) else $error("Failed to subtract values: Incorrect M.");
+        assert(c.Q == 16) else $error("Failed to subtract values: Incorrect Q.");
+        assert(c.value == 64'h0000_0000_0000_0001) else $error("Failed to subtract values: Incorrect value.");
+    endfunction
+
     function void test_mult();
         FixedPoint a;
         FixedPoint b;
