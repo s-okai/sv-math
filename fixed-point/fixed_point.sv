@@ -38,7 +38,7 @@ package fixed_point;
 
     function FixedPoint clean_value(FixedPoint a);
         // Clear the low unused bits.
-        a.value = a.value >> (MAX_FIXED_POINT_WIDTH - get_width(a));
+        a.value = a.value >>> (MAX_FIXED_POINT_WIDTH - get_width(a));
         a.value = a.value << (MAX_FIXED_POINT_WIDTH - get_width(a));
 
         return a;
@@ -215,4 +215,21 @@ package fixed_point;
     function FixedPoint int_to_fixed(int int_val, int M, int Q);
         return signed_to_fixed(signed'(int_val), M, Q);
     endfunction
+
+    function real fixed_to_real(FixedPoint fixed_val);
+        real real_val;
+
+        // Get value as an "integer", then divide by 2**Q to convert back to real.
+        real_val = real'(fixed_val.value >>> (MAX_FIXED_POINT_WIDTH - get_width(fixed_val)));
+        real_val = real_val / (2**fixed_val.Q);
+        return real_val;
+    endfunction
+
+    function void print(FixedPoint a);
+        $display("Numerical Value: %f", fixed_to_real(a));
+        $display("Raw Value: 0x%h", a.value);
+        $display("M: %d", a.M);
+        $display("Q: %d", a.Q);
+    endfunction
+
 endpackage // fixed-point

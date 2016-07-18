@@ -219,11 +219,25 @@ module fixed_point_tb();
         assert(equal(real_to_fixed(2.5, 15, 16), real_to_fixed(2.5, 15, 16))) else $error("Failed comparison: equal() failed on equal values.");
     endfunction
 
+    function void test_fixed_to_real();
+        real a;
+        a = fixed_to_real(real_to_fixed(2.5, 15, 16));
+        assert((a > 2.49) && (a < 2.51)) else $error("Failed cast from positive fixed to real: Incorrect value.");
+
+        a = fixed_to_real(real_to_fixed(-2.5, 15, 16));
+        assert((a > -2.51) && (a < -2.49)) else $error("Failed cast from negative fixed to real: Incorrect value.");
+    endfunction
+
+    function void test_print();
+        print(real_to_fixed(2.5, 15, 16));
+    endfunction
     initial
         begin
 
         // Test convert()
         test_convert();
+
+        // TODO: test_clean()
 
         // Test add()
         test_add();
@@ -250,6 +264,13 @@ module fixed_point_tb();
 
         // Test equal()
         test_equal();
+
+        // Test fixed_to_real()
+        test_fixed_to_real();
+
+        // Test print()
+        test_print();
+        
         $stop;
     end
 
